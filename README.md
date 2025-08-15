@@ -1,0 +1,125 @@
+# Digital Wallet API
+
+## Project Overview
+The **Digital Wallet API** is a secure, modular, and role-based backend system for managing digital wallets, similar to popular platforms like Bkash or Nagad. The system allows users to register, manage wallets, and perform core financial operations such as adding money, withdrawing funds, and sending money to other users. Agents can facilitate cash-in/cash-out operations, while admins oversee the system and manage users, agents, and wallets.
+
+The API is built with **Express.js** and **Mongoose**, following a modular architecture for scalability and maintainability.
+
+---
+
+## Features
+
+### Authentication & Authorization
+- JWT-based login system.
+- Secure password hashing using **bcrypt**.
+- Role-based access control for `user`, `agent`, and `admin`.
+  
+### User Features
+- Wallet automatically created during registration with an initial balance (e.g., ৳50).
+- Add money (top-up).
+- Withdraw money.
+- Send money to other users.
+- View wallet balance and transaction history.
+
+### Agent Features
+- Add money to any user's wallet (cash-in).
+- Withdraw money from any user's wallet (cash-out).
+- View commission history (optional).
+
+### Admin Features
+- View all users, agents, wallets, and transactions.
+- Block/unblock user wallets.
+- Approve/suspend agents.
+- Set system parameters (optional, e.g., transaction fees).
+
+### Transaction Management
+- All transactions are tracked and stored in the database.
+- Transactions include type, amount, fee, initiator, status, and timestamps.
+- Atomic balance updates to ensure data integrity.
+
+### Validation & Business Rules
+- Insufficient balance checks.
+- Prevent transactions for blocked wallets.
+- Validate receiver existence before sending money.
+- Optional: Minimum balance enforcement.
+
+---
+
+## Tech Stack
+
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB (via Mongoose)
+- **Authentication:** JWT, bcrypt
+- **Environment Management:** dotenv
+- **Other Tools:** Postman for testing, Nodemon/ts-node-dev for development
+
+---
+
+## Project Structure
+
+
+---
+
+## API Endpoints
+
+### Auth
+| Method | Endpoint        | Description                       | Access       |
+|--------|----------------|-----------------------------------|--------------|
+| POST   | `/auth/register`| Register a new user/agent/admin   | Public       |
+| POST   | `/auth/login`   | Login and receive JWT              | Public       |
+
+### Users
+| Method | Endpoint                   | Description                     | Access |
+|--------|----------------------------|---------------------------------|--------|
+| GET    | `/users/me`                | Get logged-in user profile      | User   |
+| PATCH  | `/users/me/topup`          | Add money to own wallet         | User   |
+| PATCH  | `/users/me/withdraw`       | Withdraw money from wallet      | User   |
+| POST   | `/users/me/send`           | Send money to another user      | User   |
+| GET    | `/users/me/transactions`   | Get own transaction history     | User   |
+
+### Agents
+| Method | Endpoint                     | Description                       | Access  |
+|--------|------------------------------|-----------------------------------|---------|
+| PATCH  | `/agents/cashin/:userId`      | Add money to a user's wallet      | Agent   |
+| PATCH  | `/agents/cashout/:userId`     | Withdraw money from a user's wallet | Agent   |
+| GET    | `/agents/commissions`         | View agent commission history     | Agent   |
+
+### Admin
+| Method | Endpoint                       | Description                      | Access |
+|--------|--------------------------------|----------------------------------|--------|
+| GET    | `/admin/users`                  | View all users                   | Admin  |
+| GET    | `/admin/agents`                 | View all agents                  | Admin  |
+| GET    | `/admin/wallets`                | View all wallets                 | Admin  |
+| GET    | `/admin/transactions`           | View all transactions            | Admin  |
+| PATCH  | `/admin/wallets/block/:id`      | Block or unblock a user wallet   | Admin  |
+| PATCH  | `/admin/agents/approve/:id`     | Approve or suspend an agent      | Admin  |
+
+---
+
+## Setup & Environment
+
+1. Clone the repository:
+```bash
+git clone <repo-url>
+cd digital-wallet-api
+
+
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# Database
+DB_URL= db_url
+
+# JWT Authentication
+JWT_ACCESS_SECRET=access_secret
+JWT_ACCESS_EXPIRES=1h
+JWT_REFRESH_SECRET=refresh_secret
+JWT_REFRESH_EXPIRES=1d
+
+# Password Hashing
+BCRYPT_SALT_ROUNDS=10
+
+# Admin Account (for initial login)
+ADMIN_EMAIL=admin@gmail.com
+ADMIN_PASSWORD=Admin@123

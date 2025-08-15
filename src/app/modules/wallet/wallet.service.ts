@@ -123,10 +123,10 @@ const sendMoney = async ( senderId: string, recipientEmail: string, amount: numb
 };
 
 
-// Service
+
 const getTransactionHistory = async (userId: string, role: string) => {
   if (role === "admin") {
-    // Admin sees all transactions
+  
     return await TransactionModel.find()
       .populate("fromUserId", "email")
       .populate("toUserId", "email")
@@ -134,7 +134,7 @@ const getTransactionHistory = async (userId: string, role: string) => {
       .lean();
   }
 
-  // User sees only their own wallet transactions
+
   const wallet = await Wallet.findOne({ userId })
     .populate({
       path: "transactions",
