@@ -109,8 +109,11 @@ DB_URL= db_url
 
 # JWT Authentication
 JWT_ACCESS_SECRET=access_secret
+
 JWT_ACCESS_EXPIRES=1h
+
 JWT_REFRESH_SECRET=refresh_secret
+
 JWT_REFRESH_EXPIRES=1d
 
 # Password Hashing
@@ -118,4 +121,5 @@ BCRYPT_SALT_ROUNDS=10
 
 # Admin Account (for initial login)
 ADMIN_EMAIL=admin@gmail.com
+
 ADMIN_PASSWORD=Admin@123
