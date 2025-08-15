@@ -22,7 +22,7 @@ router.post("/cash-out", checkAuth(Role.AGENT), WalletController.cashOut);
 
 router.get("/commission-history", checkAuth(Role.AGENT), WalletController.getCommissionHistory);
 
-
+router.get("/", checkAuth("admin"), WalletController.getWallet);
 
 
 export const walletRoutes = router;

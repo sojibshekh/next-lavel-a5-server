@@ -136,6 +136,20 @@ const getCommissionHistory = async (req: Request, res: Response, next: NextFunct
 };
 
 
+const getWallet = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+
+     const result = await WalletService.getWallet();
+        
+
+     res.status(200).json({
+      success: true,
+      message: "show all wallte successfully",
+     
+      data: result
+    });
+    
+}) 
+
 
 
 
@@ -147,5 +161,6 @@ export const WalletController = {
   getTransactionHistory,
   cashIn,
   cashOut,
-  getCommissionHistory
+  getCommissionHistory,
+  getWallet
 };

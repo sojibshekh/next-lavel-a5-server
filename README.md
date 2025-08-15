@@ -95,7 +95,7 @@ The API is built with **Express.js** and **Mongoose**, following a modular archi
 |--------|--------------------------------|----------------------------------|--------|
 | GET    | `/api/v1/user/all-user`         | View all users                   | Admin  |
 | GET    | `/admin/agents`                 | View all agents                  | Admin  |
-| GET    | `/admin/wallets`                | View all wallets                 | Admin  |
+| GET    | `/api/v1/wallet/`               | View all wallets                 | Admin  |
 | GET    | `/api/v1/wallet/transactions`   | View all transactions            | Admin  |
 | PATCH  | `/api/v1/user/:id`              | Block or unblock or update user  | Admin  |
 

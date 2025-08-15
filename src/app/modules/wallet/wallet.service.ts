@@ -305,6 +305,18 @@ const getCommissionHistory = async (agentId: string) => {
 };
 
 
+const getWallet = async () => {
+   const wallet = await Wallet.find({});
+  const totalWallet = await Wallet.countDocuments({});
+  return {
+    data: wallet,
+    meta: {
+      total: totalWallet
+    }
+  }
+};
+
+
 
 
 
@@ -315,5 +327,6 @@ export const WalletService = {
   getTransactionHistory,
   cashIn,
   cashOut,
-  getCommissionHistory
+  getCommissionHistory,
+  getWallet
 };
