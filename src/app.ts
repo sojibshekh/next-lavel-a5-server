@@ -33,4 +33,4 @@ app.use(globalErrorHandler)
 app.use(notFount)
 
 
-export default app
+export default app;
