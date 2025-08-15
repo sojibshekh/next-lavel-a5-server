@@ -71,24 +71,17 @@ The API is built with **Express.js** and **Mongoose**, following a modular archi
 ### Users
 | Method | Endpoint                   | Description                     | Access |
 |--------|----------------------------|---------------------------------|--------|
-| PATCH  | `/api/v1/wallet/add-money`          | Add money to own wallet         | User   |
-| PATCH  | `/api/v1/wallet/withdraw`       | Withdraw money from wallet      | User   |
-| POST   | `/api/v1/wallet/send-money`           | Send money to another user      | User   |
-| GET    | `/api/v1/wallet/transactions`   | Get own transaction history     | User   |
+| PATCH  | `/api/v1/wallet/add-money`      | Add money to own wallet    | User   |
+| PATCH  | `/api/v1/wallet/withdraw`       | Withdraw money from wallet | User   |
+| POST   | `/api/v1/wallet/send-money`     | Send money to another user | User   |
+| GET    | `/api/v1/wallet/transactions`   | Get own transaction history| User   |
 
 ### Agents
 | Method | Endpoint                     | Description                       | Access  |
 |--------|------------------------------|-----------------------------------|---------|
-| post  | `/api/v1/wallet/cash-in`      | Add money to a user's wallet.user body 
-{
-  "recipientEmail": "ru@gmail.com",
-  "amount": 100
-}    | Agent   |
-| post  | `/api/v1/wallet/cash-out`     | Withdraw money from a user's wallet {
-  "recipientEmail": "ru@gmail.com",
-  "amount": 100
-}  | Agent   |
-| GET    | `/api/v1/wallet/commission-history`         | View agent commission history     | Agent   |
+| post  | `/api/v1/wallet/cash-in`      | Add money to a user's wallet.user body {"recipientEmail":"ru@gmail.com","amount": 100}    | Agent   |
+| post  | `/api/v1/wallet/cash-out`     | Withdraw money from a user's wallet {"recipientEmail":"ru@gmail.com", "amount": 100}  | Agent   |
+| GET    | `/api/v1/wallet/commission-history`    | View agent commission history     | Agent   |
 
 ### Admin
 | Method | Endpoint                       | Description                      | Access |
