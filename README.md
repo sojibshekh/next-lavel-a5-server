@@ -65,43 +65,46 @@ The API is built with **Express.js** and **Mongoose**, following a modular archi
 ### Auth
 | Method | Endpoint        | Description                       | Access       |
 |--------|----------------|-----------------------------------|--------------|
-| POST   | `/auth/register`| Register a new user/agent/admin   | Public       |
-| POST   | `/auth/login`   | Login and receive JWT              | Public       |
+| POST   | `/api/v1/user/register`| Register a new user/agent/admin   | Public       |
+| POST   | `/api/v1/auth/login`   | Login and receive JWT              | Public       |
 
 ### Users
 | Method | Endpoint                   | Description                     | Access |
 |--------|----------------------------|---------------------------------|--------|
-| GET    | `/users/me`                | Get logged-in user profile      | User   |
-| PATCH  | `/users/me/topup`          | Add money to own wallet         | User   |
-| PATCH  | `/users/me/withdraw`       | Withdraw money from wallet      | User   |
-| POST   | `/users/me/send`           | Send money to another user      | User   |
-| GET    | `/users/me/transactions`   | Get own transaction history     | User   |
+| PATCH  | `/api/v1/wallet/add-money`          | Add money to own wallet         | User   |
+| PATCH  | `/api/v1/wallet/withdraw`       | Withdraw money from wallet      | User   |
+| POST   | `/api/v1/wallet/send-money`           | Send money to another user      | User   |
+| GET    | `/api/v1/wallet/transactions`   | Get own transaction history     | User   |
 
 ### Agents
 | Method | Endpoint                     | Description                       | Access  |
 |--------|------------------------------|-----------------------------------|---------|
-| PATCH  | `/agents/cashin/:userId`      | Add money to a user's wallet      | Agent   |
-| PATCH  | `/agents/cashout/:userId`     | Withdraw money from a user's wallet | Agent   |
-| GET    | `/agents/commissions`         | View agent commission history     | Agent   |
+| post  | `/api/v1/wallet/cash-in`      | Add money to a user's wallet.user body 
+{
+  "recipientEmail": "ru@gmail.com",
+  "amount": 100
+}    | Agent   |
+| post  | `/api/v1/wallet/cash-out`     | Withdraw money from a user's wallet {
+  "recipientEmail": "ru@gmail.com",
+  "amount": 100
+}  | Agent   |
+| GET    | `/api/v1/wallet/commission-history`         | View agent commission history     | Agent   |
 
 ### Admin
 | Method | Endpoint                       | Description                      | Access |
 |--------|--------------------------------|----------------------------------|--------|
-| GET    | `/admin/users`                  | View all users                   | Admin  |
+| GET    | `/api/v1/user/all-user`         | View all users                   | Admin  |
 | GET    | `/admin/agents`                 | View all agents                  | Admin  |
 | GET    | `/admin/wallets`                | View all wallets                 | Admin  |
-| GET    | `/admin/transactions`           | View all transactions            | Admin  |
-| PATCH  | `/admin/wallets/block/:id`      | Block or unblock a user wallet   | Admin  |
-| PATCH  | `/admin/agents/approve/:id`     | Approve or suspend an agent      | Admin  |
+| GET    | `/api/v1/wallet/transactions`   | View all transactions            | Admin  |
+| PATCH  | `/api/v1/user/:id`              | Block or unblock or update user  | Admin  |
+
 
 ---
 
 ## Setup & Environment
 
-1. Clone the repository:
-```bash
-git clone <repo-url>
-cd digital-wallet-api
+
 
 
 # Server Configuration
