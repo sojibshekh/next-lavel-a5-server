@@ -71,8 +71,8 @@ The API is built with **Express.js** and **Mongoose**, following a modular archi
 ### Users
 | Method | Endpoint                   | Description                     | Access |
 |--------|----------------------------|---------------------------------|--------|
-| PATCH  | `/api/v1/wallet/add-money`      | Add money to own wallet    | User   |
-| PATCH  | `/api/v1/wallet/withdraw`       | Withdraw money from wallet | User   |
+| POST   | `/api/v1/wallet/add-money`      | Add money to own wallet    | User   |
+| POST   | `/api/v1/wallet/withdraw`       | Withdraw money from wallet | User   |
 | POST   | `/api/v1/wallet/send-money`     | Send money to another user | User   |
 | GET    | `/api/v1/wallet/transactions`   | Get own transaction history| User   |
 
