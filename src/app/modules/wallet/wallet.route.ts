@@ -6,8 +6,8 @@ import { Role } from "../user/user.interface";
 
 const router = express.Router();
 
-// only for logged in users
-//router.get("/my-wallet", checkAuth("user", "agent", "admin"), WalletController.getMyWallet);
+
+router.get("/my-wallet", checkAuth("user", "agent", "admin"), WalletController.getMyWallet);
 
 router.post("/add-money", checkAuth(Role.USER), WalletController.addMoney);
 router.post("/withdraw", checkAuth(Role.USER, Role.AGENT), WalletController.withdrawMoney);

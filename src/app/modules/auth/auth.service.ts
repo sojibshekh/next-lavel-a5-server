@@ -83,8 +83,22 @@ const resetPasswordUP = async(oldPassword: string, newPassword: string , decoded
     
 }
 
+
+const getUserinfo = async (userId: string) => {
+    const user = await User.findById(userId).select("-password");
+
+    return {
+        user,
+    };
+};
+
+
+
+
+
  export const AuthServices ={
     credentialsLogin,
     getNewAccessToken,
-    resetPasswordUP
+    resetPasswordUP,
+    getUserinfo
 }

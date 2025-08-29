@@ -151,6 +151,19 @@ const getWallet = catchAsync(async(req: Request, res: Response, next: NextFuncti
 }) 
 
 
+const getMyWallet = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+        const userId = req.user?.id;
+     const result = await WalletService.getMyWallet(userId);
+        
+     res.status(200).json({
+      success: true,
+      message: "show all wallte successfully",
+     
+      data: result
+    });
+    
+}) 
+
 
 
 
@@ -162,5 +175,6 @@ export const WalletController = {
   cashIn,
   cashOut,
   getCommissionHistory,
-  getWallet
+  getWallet,
+  getMyWallet
 };

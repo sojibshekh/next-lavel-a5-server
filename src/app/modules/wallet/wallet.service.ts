@@ -317,6 +317,15 @@ const getWallet = async () => {
 };
 
 
+const getMyWallet = async (userId : string) => {
+   const wallet = await Wallet.findOne({userId});
+
+  return {
+    data: wallet,
+  }
+};
+
+
 
 
 
@@ -328,5 +337,6 @@ export const WalletService = {
   cashIn,
   cashOut,
   getCommissionHistory,
-  getWallet
+  getWallet,
+  getMyWallet
 };
