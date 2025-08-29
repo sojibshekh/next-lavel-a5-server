@@ -93,9 +93,24 @@ const resetPassword = catchAsync( async(req: Request, res: Response, next: NextF
 })
 
 
+const getUserInfo = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user; // checkAuth middleware থেকে আসবে
+
+    sendResponse(res, {
+        statusCode: htttpstatus.OK,
+        success: true,
+        message: "Current user info",
+        data: user
+    });
+});
+
+
+ 
+
  export const AuthControllers ={
     credentialsLogin,
     getNewAcessToken,
     logOut,
-    resetPassword
+    resetPassword,
+    getUserInfo
 }

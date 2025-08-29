@@ -10,5 +10,9 @@ router.post("/refresh-token", AuthControllers.getNewAcessToken);
 router.post("/logout", AuthControllers.logOut); 
 router.post("/reset-password", checkAuth(...Object.values(Role)),AuthControllers.resetPassword);
 
+// auth.routes.ts
+router.get("/me", checkAuth(...Object.values(Role)), AuthControllers.getUserInfo);
+
+
 
 export const AuthRoutes = router;
