@@ -87,6 +87,8 @@ const cashIn = catchAsync(async (req: Request, res: Response) => {
   const agentId = req.user?.id; 
   const { recipientEmail, amount } = req.body;
 
+ 
+
   if (!agentId) throw new Error("Unauthorized");
   if (amount <= 0) throw new AppError(httpStatus.BAD_REQUEST, "Amount must be positive", " ");
 

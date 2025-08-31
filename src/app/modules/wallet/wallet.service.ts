@@ -182,17 +182,33 @@ const cashIn = async (agentId: string, recipientEmail: string, amount: number) =
     throw new AppError(httpStatus.NOT_FOUND, "Agent wallet not found", " ");
   }
 
+  
+
+
   // 💰 Commission 
   const commission = Math.round(amount * 0.01); // 1%
-  const netAmount = amount - commission;
+ 
+
+
+    // ✅ Check agent has enough balance
+  if (agentWallet.balance < amount) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Agent has insufficient balance", " ");
+  }
 
   // ✅ Recipient wallet add
-  recipientWallet.balance += netAmount;
+  recipientWallet.balance += amount;
+
+
+    // ✅ Agent wallet deduct full amount
+  agentWallet.balance -= amount;
+
+  agentWallet.balance += commission; // Agent gets the commission
+
 
   // 📜 Transaction create
   const transaction = await TransactionModel.create({
     type: "cash-in",
-    amount: netAmount,
+    amount: amount,
     fromUserId: agentId,
     toUserId: recipientUser._id,
     commission,

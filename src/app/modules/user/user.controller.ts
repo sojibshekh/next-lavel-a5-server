@@ -23,7 +23,11 @@ import AppError from "../../errorHelpers/appErrors";
 
 
 const CreateUser = catchAsync( async(req: Request, res: Response, next: NextFunction)=>{
+
     const user = await UserServices.createUser(req.body)
+
+
+
       
     //    res.status(htttpstatus.CREATED).json({
     //         message: 'user create success',

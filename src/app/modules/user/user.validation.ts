@@ -24,6 +24,7 @@ import { IsActive, Role } from "./user.interface";
         .optional(),
             
             address: z.string().optional(),
+            role: z.enum(Object.values(Role) as [string]),
            
 
     })

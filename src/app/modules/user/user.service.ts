@@ -13,7 +13,7 @@ import { Types } from "mongoose";
 
 const createUser = async (playlod: Partial<Iuser> )=>{
 
-    const {  email ,password, ...rest} = playlod;
+    const {  email ,password, role: userRole, ...rest} = playlod;
 
     const isExist = await User.findOne({email})
 
@@ -28,6 +28,7 @@ const createUser = async (playlod: Partial<Iuser> )=>{
       const user = await User.create({
         email,
         password: hassPassrord,
+        role:userRole  as Role,
         auth: [authProvider],
         ...rest
       });

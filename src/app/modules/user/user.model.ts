@@ -25,13 +25,13 @@ const UserSchema = new Schema<Iuser>({
     phone: {type: String, required: false},
     picture: {type: String, required: false},
     address: {type: String, required: false},
-    isDeleted: {type: boolean, default: 'false'},
+    isDeleted: {type: boolean, default: false},
     isActive: {
         type: String, 
         enum: Object.values(IsActive),
         default: IsActive.ACTIVE
     },
-    isVerified: {type: Boolean, default: 'false'},
+    isVerified: {type: Boolean, default: false},
 
     auth:[authProviderSchema],
   
