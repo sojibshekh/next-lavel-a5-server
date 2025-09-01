@@ -104,10 +104,11 @@ const cashIn = catchAsync(async (req: Request, res: Response) => {
 
 
 const cashOut = catchAsync(async (req: Request, res: Response) => {
- const { recipientEmail, amount } = req.body;
-const agentId = req.user?.id;
+ const { agentEmail, amount } = req.body;
+ const userId = req.user?.id;
 
-const result = await WalletService.cashOut(agentId, recipientEmail, amount);
+
+const result = await WalletService.cashOut(userId, agentEmail, amount);
 
 res.status(200).json({
   success: true,

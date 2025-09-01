@@ -232,75 +232,78 @@ const cashIn = async (agentId: string, recipientEmail: string, amount: number) =
 };
 
 
-
-const cashOut = async (agentId: string, recipientEmail: string, amount: number) => {
+const cashOut = async (userId: string, agentEmail: string, amount: number) => {
   if (amount <= 0) {
     throw new AppError(httpStatus.BAD_REQUEST, "Amount must be positive", " ");
   }
 
-  // ✅ Recipient user খুঁজে বের করো
-  const recipientUser = await User.findOne({ email: recipientEmail });
-  if (!recipientUser) {
-    throw new AppError(httpStatus.NOT_FOUND, "Recipient not found", " ");
+  // ✅ User (sender) খুঁজে বের করো
+  const userWallet = await Wallet.findOne({ userId });
+  if (!userWallet) {
+    throw new AppError(httpStatus.NOT_FOUND, "User wallet not found", " ");
+  }
+  if (userWallet.isLocked) {
+    throw new AppError(httpStatus.FORBIDDEN, "User wallet is locked", " ");
   }
 
-  // ✅ Recipient wallet খুঁজে বের করো (যেখান থেকে টাকা কাটা হবে)
-  const recipientWallet = await Wallet.findOne({ userId: recipientUser._id });
-  if (!recipientWallet) {
-    throw new AppError(httpStatus.NOT_FOUND, "Recipient wallet not found", " ");
-  }
-  if (recipientWallet.isLocked) {
-    throw new AppError(httpStatus.FORBIDDEN, "Recipient wallet is locked", " ");
-  }
-  if (recipientWallet.balance < amount) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Insufficient balance", " ");
+  // ✅ Agent খুঁজে বের করো
+  const agentUser = await User.findOne({ email: agentEmail });
+  if (!agentUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "Agent not found", " ");
   }
 
-  // ✅ Agent wallet (Commission এর জন্য)
-  const agentWallet = await Wallet.findOne({ userId: agentId });
+  const agentWallet = await Wallet.findOne({ userId: agentUser._id });
   if (!agentWallet) {
     throw new AppError(httpStatus.NOT_FOUND, "Agent wallet not found", " ");
   }
+  if (agentWallet.isLocked) {
+    throw new AppError(httpStatus.FORBIDDEN, "Agent wallet is locked", " ");
+  }
 
-  // 💰 Commission হিসাব (Agent পাবে)
-  const commission = Math.round(amount * 0.01); // 1%
-  const totalDeduction = amount + commission; // user এর থেকে কাটা হবে amount+commission
+  // 💰 কমিশন হিসাব (Agent পাবে)
+  const commission = Math.round(amount * 0.02); // 1%
+  const totalDeduction = amount + commission;
 
-  if (recipientWallet.balance < totalDeduction) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Insufficient balance for cash-out + commission", " ");
+  if (userWallet.balance < totalDeduction) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Insufficient balance for cash-out + commission",
+      " "
+    );
   }
 
   // ✅ User wallet থেকে টাকা কাটা
-  recipientWallet.balance -= totalDeduction;
+  userWallet.balance -= totalDeduction;
 
-  // ✅ Agent wallet এ টাকা যোগ করা (commission অংশ)
-  agentWallet.balance += commission;
+  // ✅ Agent wallet এ টাকা যোগ (মূল amount + কমিশন)
+  agentWallet.balance += amount + commission;
 
   // 📜 Transaction create
   const transaction = await TransactionModel.create({
     type: "cash-out",
     amount,
-    fromUserId: recipientUser._id,
-    toUserId: agentId,
+    fromUserId: userId,       // যিনি টাকা দিচ্ছেন
+    toUserId: agentUser._id,  // যিনি টাকা পাচ্ছেন
     commission,
     status: "success",
-    date: new Date(),
   });
 
   // Transaction log দুই দিকেই
-  recipientWallet.transactions.push(transaction._id as Types.ObjectId);
+  userWallet.transactions.push(transaction._id as Types.ObjectId);
   agentWallet.transactions.push(transaction._id as Types.ObjectId);
 
   // ✅ Save করা
-  await recipientWallet.save();
+  await userWallet.save();
   await agentWallet.save();
 
   return {
-    recipientWallet,
+    userWallet,
     agentWallet,
     transaction,
   };
 };
+
+
 
 
 const getCommissionHistory = async (agentId: string) => {

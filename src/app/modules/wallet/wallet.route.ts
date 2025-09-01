@@ -14,11 +14,11 @@ router.post("/withdraw", checkAuth(Role.USER, Role.AGENT), WalletController.with
 
 router.post("/send-money", checkAuth(Role.USER), WalletController.sendMoneyToUser);
 
-router.get("/transactions", checkAuth(Role.USER , Role.ADMIN ), WalletController.getTransactionHistory);
+router.get("/transactions", checkAuth(Role.USER , Role.ADMIN , Role.AGENT), WalletController.getTransactionHistory);
 
 router.post("/cash-in", checkAuth(Role.AGENT), WalletController.cashIn);
 
-router.post("/cash-out", checkAuth(Role.AGENT), WalletController.cashOut);
+router.post("/cash-out", checkAuth(Role.USER), WalletController.cashOut);
 
 router.get("/commission-history", checkAuth(Role.AGENT), WalletController.getCommissionHistory);
 
