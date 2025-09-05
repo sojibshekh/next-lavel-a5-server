@@ -11,6 +11,9 @@ import TransactionModel, { ITransaction } from "../transaction/transaction.model
 import { Types } from "mongoose";
 
 
+
+
+
 const createUser = async (playlod: Partial<Iuser> )=>{
 
     const {  email ,password, role: userRole, ...rest} = playlod;
@@ -67,36 +70,46 @@ const createUser = async (playlod: Partial<Iuser> )=>{
 
 }
 
-const updateUser = async (userId: string, playlod: Partial<Iuser>,decodedToken:JwtPayload)=>{
-
-  const ifuserExists = await User.findById(userId);
-  if(!ifuserExists){
-    throw new AppError(httpStatus.NOT_FOUND, "User not found", " ");
+const updateUser = async (
+  userId: string, 
+  payload?: Partial<Iuser>, 
+  decodedToken: JwtPayload
+) => {
+  // Check if user exists
+  const existingUser = await User.findById(userId);
+  if (!existingUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found", "");
   }
 
-  if(decodedToken.role===Role.USER || decodedToken.role===Role.AGENT){
-    throw new AppError(httpStatus.FORBIDDEN, "You are not allowed to update this user your not ad", " ");
+  // Only admin can update users
+  if (decodedToken.role !== Role.ADMIN) {
+    throw new AppError(httpStatus.FORBIDDEN, "You are not allowed to update this user", "");
   }
 
-  if(decodedToken.role===!Role.ADMIN){
-   throw new AppError(httpStatus.FORBIDDEN, "You are not allowed to update this user role", " ");
+
+    // Ensure payload is defined
+  if (!payload) {
+    throw new AppError(httpStatus.BAD_REQUEST, "No data provided for update", " ");
   }
 
-  if(playlod.isActive || playlod.isDeleted || playlod.isVerified){
-    if(decodedToken.role===Role.USER || decodedToken.role===Role.AGENT){
-    throw new AppError(httpStatus.FORBIDDEN, "You are not allowed to update this user your not active", " ");
-  }
+  // Hash password if present
+  if (payload.password) {
+    payload.password = await bcryptjs.hash(
+      payload.password,
+      Number(envVars.BCRYPT_SALT_ROUNDS)
+    );
   }
 
-  if(playlod.password){
-    playlod.password = await bcryptjs.hash(playlod.password, envVars.BCRYPT_SALT_ROUNDS)
-  }
-  
-  const updatedUser = await User.findByIdAndUpdate(userId,playlod,{new: true, runValidators:true})
+  // Update the user
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    payload,
+    { new: true, runValidators: true }
+  );
 
   return updatedUser;
+};
 
-}
 
 const getUser = async ()=>{
   const users = await User.find({});
@@ -110,8 +123,41 @@ const getUser = async ()=>{
 }
 
 
+
+
+// User service function
+const updateOwnProfile = async (userId: string, payload: Partial<Iuser>) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found", "");
+  }
+
+  // password থাকলে hash করে দিন
+  if (payload.password) {
+    payload.password = await bcryptjs.hash(
+      payload.password,
+      Number(envVars.BCRYPT_SALT_ROUNDS)
+    );
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(userId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return updatedUser;
+};
+
+
+
+
+
+
+
  export const UserServices = {
     createUser,
     getUser,
-    updateUser
+    updateUser,
+    updateOwnProfile
+ 
 }

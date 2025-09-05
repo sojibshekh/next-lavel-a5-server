@@ -15,10 +15,20 @@ import { checkAuth } from "../../middelwares/checkAuth";
 const router = Router();
 
 
-
+// Route
+router.patch(
+  "/update-profile",
+  checkAuth(Role.USER, Role.AGENT),
+  userControllers.updateOwnProfile
+);
 
 router.post('/register', validateRequest(createUserZodSchema), userControllers.CreateUser);
 router.get("/all-user", checkAuth(Role.ADMIN) ,userControllers.getAllUsers);
 router.patch("/:id", checkAuth(...Object.values(Role)), userControllers.updateUser);
+
+
+
+
+
 
 export const userRoutes = router;

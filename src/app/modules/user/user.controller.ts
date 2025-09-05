@@ -81,8 +81,43 @@ const getAllUsers = catchAsync(async(req: Request, res: Response, next: NextFunc
 }) 
 
 
+// Controller
+export const updateOwnProfile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id; // checkAuth থেকে আসবে
+    const payload = req.body; // body আসতে হবে
+
+    if (!userId) {
+      return next(new AppError(htttpstatus.UNAUTHORIZED, "Unauthorized user", " "));
+    }
+
+    if (!payload) {
+      return next(new AppError(htttpstatus.BAD_REQUEST, "No data provided", " "));
+    }
+
+    const updatedUser = await UserServices.updateOwnProfile(userId, payload);
+
+    sendResponse(res, {
+      statusCode: htttpstatus.OK,
+      success: true,
+      message: "Profile updated successfully",
+      data: updatedUser,
+    });
+  }
+);
+
+
+
+
+
+
+
+
+
 export const userControllers = {
     CreateUser,
     getAllUsers,
-    updateUser
+    updateUser,
+    updateOwnProfile
+   
 }
