@@ -72,18 +72,18 @@ const createUser = async (playlod: Partial<Iuser> )=>{
 
 const updateUser = async (
   userId: string, 
-  payload?: Partial<Iuser>, 
+  payload: Partial<Iuser>, 
   decodedToken: JwtPayload
 ) => {
   // Check if user exists
   const existingUser = await User.findById(userId);
   if (!existingUser) {
-    throw new AppError(httpStatus.NOT_FOUND, "User not found", "");
+    throw new AppError(httpStatus.NOT_FOUND, "User not found", " ");
   }
 
   // Only admin can update users
   if (decodedToken.role !== Role.ADMIN) {
-    throw new AppError(httpStatus.FORBIDDEN, "You are not allowed to update this user", "");
+    throw new AppError(httpStatus.FORBIDDEN, "You are not allowed to update this user", " ");
   }
 
 
@@ -129,7 +129,7 @@ const getUser = async ()=>{
 const updateOwnProfile = async (userId: string, payload: Partial<Iuser>) => {
   const user = await User.findById(userId);
   if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, "User not found", "");
+    throw new AppError(httpStatus.NOT_FOUND, "User not found", " ");
   }
 
   // password থাকলে hash করে দিন

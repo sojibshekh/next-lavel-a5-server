@@ -58,13 +58,13 @@ const logOut = catchAsync( async(req: Request, res: Response, next: NextFunction
      
     res.clearCookie("accessToken",{
         httpOnly: true,
-        secure: false, 
-        sameSite: "lax"
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none"
     });
     res.clearCookie("refreshToken",{
         httpOnly: true,
-        secure: false, 
-        sameSite: "lax"
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none"
     });
   
         sendResponse(res,{

@@ -19,7 +19,7 @@ const app = express()
 app.use(cookieParser());
 app.use(express.json())
 app.use(cors({
-    origin: ['http://localhost:3000','http://localhost:5173','https://digital-wallte-forntend.vercel.app/'],
+    origin: ['http://localhost:3000','http://localhost:5173','https://digital-wallte-forntend.vercel.app'],
     credentials: true,
 
    }))
